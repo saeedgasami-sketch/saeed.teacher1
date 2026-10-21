@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لایه‌های زمین برای کودکان</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #e0f7fa; /* آبی آسمانی ملایم */
+            background-image: radial-gradient(circle, #ffffff 10%, transparent 10%);
+            background-size: 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: #ff5722;
+            text-shadow: 2px 2px 0px #fff;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* کانتینر اصلی که شکل برش را نگه می‌دارد */
+        .earth-container {
+            position: relative;
+            width: 350px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            filter: drop-shadow(0px 15px 15px rgba(0,0,0,0.2));
+        }
+
+        /* استایل کلی لایه‌ها */
+        .layer {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            color: white;
+            font-weight: 900;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            border-bottom: 3px solid rgba(255,255,255,0.5);
+        }
+
+        /* افکت هاور (وقتی موس روی لایه می‌رود) */
+        .layer:hover {
+            transform: scale(1.05) translateX(-10px);
+            z-index: 10;
+            filter: brightness(1.2);
+            border-radius: 15px;
+        }
+
+        /* انیمیشن پرش هنگام کلیک */
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1) translateX(-15px); }
+        }
+        .layer.active {
+            animation: bounce 0.4s ease;
+        }
+
+        /* شکل‌دهی به لایه‌ها (شبیه تصویر کتاب) */
+        
+        /* 1. پوسته (بالاترین لایه) */
+        .crust {
+            height: 60px;
+            background: linear-gradient(to bottom, #8d6e63, #5d4037);
+            clip-path: polygon(15% 0, 85% 0, 100% 100%, 0% 100%);
+            width: 100%;
+            border-radius: 10px 10px 0 0;
+        }
+
+        /* 2. گوشته */
+        .mantle {
+            height: 120px;
+            background: linear-gradient(to bottom, #ff9800, #e65100);
+            clip-path: polygon(0% 0, 100% 0, 100% 100%, 0% 100%);
+            width: 100%;
+        }
+
+        /* 3. هسته خارجی */
+        .outer-core {
+            height: 100px;
+            background: linear-gradient(to bottom, #ffeb3b, #fbc02d);
+            clip-path: polygon(0% 0, 100% 0, 100% 100%, 0% 100%);
+            width: 100%;
+            color: #333;
+            text-shadow: none;
+        }
+
+        /* 4. هسته داخلی (پایین‌ترین لایه) */
+        .inner-core {
+            height: 70px;
+            background: linear-gradient(to bottom, #ffffff, #bdbdbd);
+            clip-path: polygon(0% 0, 100% 0, 85% 100%, 15% 100%);
+            width: 100%;
+            border-radius: 0 0 50% 50% / 0 0 20px 20px;
+            color: #333;
+            text-shadow: none;
+        }
+
+        /* پنل اطلاعات کودکانه */
+        .info-box {
+            margin-top: 20px;
+            background: #ffffff;
+            border: 4px solid #ff9800;
+            border-radius: 20px;
+            padding: 15px 20px;
+            width: 320px;
+            text-align: right;
+            box-shadow: 0 8px 0 #e65100;
+            transition: all 0.3s ease;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-box h2 {
+            margin: 0 0 10px 0;
+            color: #d84315;
+            font-size: 1.3rem;
+            text-align: center;
+            border-bottom: 2px dashed #ffcc80;
+            padding-bottom: 5px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #444;
+            font-weight: bold;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .info-box p span.icon {
+            margin-left: 5px;
+            font-size: 1.1rem;
+        }
+
+        /* راهنمای کوچک */
+        .hint {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🌍 زمین ما این شکلیه!</h1>
+
+    <div class="earth-container">
+        <!-- لایه 1: پوسته -->
+        <div class="layer crust" 
+             data-layer="crust" 
+             data-title="پوسته زمین (Crust)" 
+             data-depth="۵ تا ۷۰ کیلومتر" 
+             data-material="سنگ‌های سخت مثل گرانیت و بازالت" 
+             data-temp="دمای معمولی (حدود ۲۰ درجه)">
+            پوسته
+        </div>
+        
+        <!-- لایه 2: گوشته -->
+        <div class="layer mantle" 
+             data-layer="mantle" 
+             data-title="گوشته (Mantle)" 
+             data-depth="۷۰ تا ۲۹۰۰ کیلومتر" 
+             data-material="سنگ‌های نرم و مذاب (ماگما)" 
+             data-temp="بسیار گرم (حدود ۱۰۰۰ تا ۳۰۰۰ درجه)">
+            گوشته
+        </div>
+        
+        <!-- لایه 3: هسته خارجی -->
+        <div class="layer outer-core" 
+             data-layer="outer-core" 
+             data-title="هسته خارجی (Outer Core)" 
+             data-depth="۲۹۰۰ تا ۵۱۰۰ کیلومتر" 
+             data-material="آهن و نیکل مذاب (مثل آب روان)" 
+             data-temp="خیلی داغ (حدود ۴۰۰۰ تا ۵۰۰۰ درجه)">
+            هسته خارجی
+        </div>
+        
+        <!-- لایه 4: هسته داخلی -->
+        <div class="layer inner-core" 
+             data-layer="inner-core" 
+             data-title="هسته داخلی (Inner Core)" 
+             data-depth="۵۱۰۰ تا ۶۴۰۰ کیلومتر" 
+             data-material="آهن و نیکل جامد (مثل یک توپ فلزی)" 
+             data-temp="داغ‌ترین جا (حدود ۵۰۰۰ تا ۶۰۰۰ درجه)">
+            هسته داخلی
+        </div>
+    </div>
+
+    <div class="info-box" id="infoBox">
+        <h2>👇 روی لایه‌ها کلیک کن!</h2>
+        <p style="text-align: center; color: #777;">ببین داخل زمین چه خبره!</p>
+    </div>
+
+    <div class="hint">🎵 هر لایه یه صدای قشنگ داره!</div>
+
+    <script>
+        // ==================== سیستم صوتی فانتزی ====================
+        let audioCtx = null;
+
+        function playFantasySound(layerType) {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            const now = audioCtx.currentTime;
+
+            // نُت‌های موسیقی متفاوت برای هر لایه
+            let noteFreq = 440; 
+            if (layerType === 'crust') noteFreq = 523.25; // دو
+            if (layerType === 'mantle') noteFreq = 659.25; // می
+            if (layerType === 'outer-core') noteFreq = 783.99; // سل
+            if (layerType === 'inner-core') noteFreq = 1046.50; // دو اکتاو بالا
+
+            // 1. صدای اصلی
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.type = 'triangle'; 
+            osc.frequency.setValueAtTime(noteFreq, now);
+            osc.frequency.exponentialRampToValueAtTime(noteFreq * 1.5, now + 0.1);
+            osc.frequency.exponentialRampToValueAtTime(noteFreq, now + 0.3);
+
+            gainNode.gain.setValueAtTime(0.3, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 0.5);
+
+            // 2. صدای اکو
+            setTimeout(() => {
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(noteFreq * 2, audioCtx.currentTime);
+                gain2.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.start(audioCtx.currentTime);
+                osc2.stop(audioCtx.currentTime + 0.4);
+            }, 150);
+        }
+
+        // ==================== تعاملات ====================
+        const layers = document.querySelectorAll('.layer');
+        const infoBox = document.getElementById('infoBox');
+
+        layers.forEach(layer => {
+            layer.addEventListener('click', function() {
+                layers.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                const title = this.getAttribute('data-title');
+                const depth = this.getAttribute('data-depth');
+                const material = this.getAttribute('data-material');
+                const temp = this.getAttribute('data-temp');
+                const layerType = this.getAttribute('data-layer');
+
+                playFantasySound(layerType);
+
+                let borderColor = '#ff9800';
+                if (layerType === 'crust') borderColor = '#8d6e63';
+                if (layerType === 'mantle') borderColor = '#ff9800';
+                if (layerType === 'outer-core') borderColor = '#fbc02d';
+                if (layerType === 'inner-core') borderColor = '#bdbdbd';
+                
+                infoBox.style.borderColor = borderColor;
+                infoBox.style.boxShadow = `0 8px 0 ${borderColor}`;
+
+                // ساخت اطلاعات جدید با آیکون‌های جذاب
+                infoBox.innerHTML = `
+                    <h2 style="color: ${borderColor === '#bdbdbd' ? '#555' : borderColor}">${title}</h2>
+                    <p><span class="icon">📏</span> <strong>عمق:</strong> ${depth}</p>
+                    <p><span class="icon">🪨</span> <strong>جنس:</strong> ${material}</p>
+                    <p><span class="icon">🌡️</span> <strong>دما:</strong> ${temp}</p>
+                `;
+
+                setTimeout(() => {
+                    this.classList.remove('active');
+                }, 400);
+            });
+        });
+
+        // فعال‌سازی صدا
+        document.body.addEventListener('click', () => {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }, { once: true });
+
+    </script>
+</body>
+</html>
